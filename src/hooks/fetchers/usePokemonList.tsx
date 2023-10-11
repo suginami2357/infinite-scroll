@@ -10,7 +10,7 @@ const getKey = (
     return null;
   }
 
-  return `https://pokeapi.co/api/v2/pokemon/?offset=${pageIndex * 20}&limit=20`;
+  return `https://pokeapi.co/api/v2/pokemon/?offset=${pageIndex * 5}&limit=5`;
 };
 
 export const usePokemonList = () => {

@@ -1,53 +1,68 @@
 import InfiniteScroll from "react-infinite-scroll-component";
 import { usePokemonList } from "../../hooks/fetchers/usePokemonList";
-import { Button, Card } from "@nextui-org/react";
-import { CardActions, CardContent, CardMedia, Typography } from "@mui/material";
+import { Card, CardContent, CardMedia, Typography } from "@mui/material";
+import { usePokemonDetailList } from "../../hooks/fetchers/usePokemonDetailList";
 import { getImageUrl } from "./utils";
 
 export const PokemonPage = () => {
-  const { data, error, size, setSize } = usePokemonList();
+  const { data: pokemons, error, size, setSize } = usePokemonList();
+  const { data: pokemonDetails } = usePokemonDetailList(pokemons);
 
   if (error) {
     return <div>エラーが発生しました。</div>;
   }
-  const flatData = data?.flatMap((x) => x.results) || [];
 
-  return (
-    <InfiniteScroll
-      dataLength={flatData.length}
-      next={() => setSize(size + 1)}
-      hasMore={true}
-      loader={<div>読み込み中...</div>}
-    >
-      {flatData.map((pokemon) => (
-        <Card>
-          <CardMedia
-            component="img"
-            sx={{ objectFit: "cover", height: "50%" }}
-            image={getImageUrl(pokemon)}
-          />
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
-              Lizard
-            </Typography>
-          </CardContent>
-        </Card>
-      ))}
-    </InfiniteScroll>
+  const data = pokemons?.flatMap((x) => x.results);
+  data?.forEach(
+    (x) => (x.value = pokemonDetails?.find((y) => y.name === x.name))
   );
 
-  // return (
-  //   <InfiniteScroll
-  //     dataLength={flatData.length}
-  //     next={() => setSize(size + 1)}
-  //     hasMore={true}
-  //     loader={<div>読み込み中...</div>}
-  //   >
-  //     {flatData.map((pokemon) => (
-  //       <div key={pokemon.name}>
-  //         <img src={getImageUrl(pokemon)} alt={pokemon.name} />
-  //       </div>
-  //     ))}
-  //   </InfiniteScroll>
-  // );
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        minHeight: "100vh",
+      }}
+    >
+      <InfiniteScroll
+        dataLength={pokemons?.length || 0}
+        next={() => setSize(size + 1)}
+        hasMore={true}
+        loader={<div>読み込み中...</div>}
+      >
+        {data?.map((item) => (
+          <Card
+            key={item.name}
+            sx={{
+              height: 380,
+              width: 300,
+              margin: 1,
+              backgroundColor: "whitesmoke",
+            }}
+          >
+            <CardMedia
+              component="img"
+              image={getImageUrl(item)}
+              // image={
+              //   item.value?.sprites.other["official-artwork"].front_default
+              // }
+            />
+            <CardContent>
+              <Typography
+                gutterBottom
+                variant="h5"
+                component="div"
+                textAlign="center"
+              >
+                {item.value ? item.value.species.name : item.name}
+              </Typography>
+            </CardContent>
+          </Card>
+        ))}
+      </InfiniteScroll>
+    </div>
+  );
 };
