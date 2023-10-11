@@ -1,5 +1,5 @@
-import { PokemonList } from "./components/PokemonList";
+import { PokemonPage } from "./components/Pokemons/PokemonPage";
 
 export const App = () => {
-  return <PokemonList />;
+  return <PokemonPage />;
 };
