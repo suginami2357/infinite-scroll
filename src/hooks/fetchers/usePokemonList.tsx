@@ -2,12 +2,16 @@ import useSWRInfinite from "swr/infinite";
 import { PokemonListResponse } from "../../types/PokemonListResponse";
 import { fetcher } from "./utils";
 
-export const usePokemonList = (pageSize: number) => {
+export const usePokemonList = (
+  pageSize: number,
+  setHasMore: React.Dispatch<React.SetStateAction<boolean>>
+) => {
   const getKey = (
     pageIndex: number,
     previousPageData: PokemonListResponse | null
   ) => {
     if (previousPageData && !previousPageData.results.length) {
+      setHasMore(false);
       return null;
     }
 

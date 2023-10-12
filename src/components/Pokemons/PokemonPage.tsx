@@ -3,9 +3,12 @@ import { usePokemonList } from "../../hooks/fetchers/usePokemonList";
 import { Card, CardContent, CardMedia, Typography } from "@mui/material";
 import { usePokemonDetailList } from "../../hooks/fetchers/usePokemonDetailList";
 import { getImageUrl } from "./utils";
+import { useState } from "react";
 
 export const PokemonPage = () => {
-  const { data: pokemons, size, setSize } = usePokemonList(5);
+  const [hasMore, setHasMore] = useState(true);
+
+  const { data: pokemons, size, setSize } = usePokemonList(5, setHasMore);
   usePokemonDetailList(pokemons?.[size - 1]);
 
   const data = pokemons?.flatMap((x) => x.results);
@@ -19,9 +22,9 @@ export const PokemonPage = () => {
       }}
     >
       <InfiniteScroll
-        dataLength={pokemons?.length || 0}
+        dataLength={data?.length || 0}
         next={() => setSize(size + 1)}
-        hasMore={true}
+        hasMore={hasMore}
         loader={<div>読み込み中...</div>}
       >
         {data?.map((item) => (
