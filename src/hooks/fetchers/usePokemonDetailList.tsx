@@ -23,5 +23,9 @@ export const usePokemonDetailList = (data: PokemonListResponse | undefined) => {
           ?.names.find((z) => z.language.name === "ja")?.name || "")
   );
 
+  data?.results.forEach(
+    (x) => (x.value = pokemonDetails.data?.find((y) => y.name === x.name))
+  );
+
   return pokemonDetails;
 };
