@@ -3,8 +3,8 @@ import { PokemonListResponse } from "../../types/PokemonListResponse";
 import { fetcher } from "./utils";
 
 export const usePokemonList = (
-  pageSize: number,
-  setHasMore: React.Dispatch<React.SetStateAction<boolean>>
+  setHasMore: React.Dispatch<React.SetStateAction<boolean>>,
+  pageSize: number
 ) => {
   const getKey = (
     pageIndex: number,

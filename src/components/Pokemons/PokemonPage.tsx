@@ -8,7 +8,7 @@ import { useState } from "react";
 export const PokemonPage = () => {
   const [hasMore, setHasMore] = useState(true);
 
-  const { data: pokemons, size, setSize } = usePokemonList(5, setHasMore);
+  const { data: pokemons, size, setSize } = usePokemonList(setHasMore, 5);
   usePokemonDetailList(pokemons?.[size - 1]);
 
   const data = pokemons?.flatMap((x) => x.results);
