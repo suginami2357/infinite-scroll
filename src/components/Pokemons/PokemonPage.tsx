@@ -5,17 +5,13 @@ import { usePokemonDetailList } from "../../hooks/fetchers/usePokemonDetailList"
 import { getImageUrl } from "./utils";
 
 export const PokemonPage = () => {
-  const { data: pokemons, error, size, setSize } = usePokemonList();
-  const { data: pokemonDetails } = usePokemonDetailList(pokemons);
+  const { data: pokemons, size, setSize } = usePokemonList(5);
+  const { data: pokemonDetails } = usePokemonDetailList(pokemons?.[size - 1]);
 
-  if (error) {
-    return <div>エラーが発生しました。</div>;
-  }
-
-  const data = pokemons?.flatMap((x) => x.results);
-  data?.forEach(
+  pokemons?.[size - 1]?.results.forEach(
     (x) => (x.value = pokemonDetails?.find((y) => y.name === x.name))
   );
+  const data = pokemons?.flatMap((x) => x.results);
 
   return (
     <div
