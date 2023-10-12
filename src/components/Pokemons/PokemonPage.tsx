@@ -2,6 +2,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { usePokemonList } from "../../hooks/fetchers/usePokemonList";
 import { Card, CardContent, CardMedia, Typography } from "@mui/material";
 import { usePokemonDetailList } from "../../hooks/fetchers/usePokemonDetailList";
+import { getImageUrl } from "./utils";
 
 export const PokemonPage = () => {
   const { data: pokemons, size, setSize } = usePokemonList(5);
@@ -13,8 +14,6 @@ export const PokemonPage = () => {
     <div
       style={{
         display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
         justifyContent: "center",
         minHeight: "100vh",
       }}
@@ -38,17 +37,13 @@ export const PokemonPage = () => {
             <CardMedia
               component="img"
               image={
-                item.value?.sprites.other["official-artwork"].front_default
+                item.value?.sprites.other["official-artwork"].front_default ||
+                getImageUrl(item)
               }
             />
             <CardContent>
-              <Typography
-                gutterBottom
-                variant="h5"
-                component="div"
-                textAlign="center"
-              >
-                {item.value ? item.value.species.name : item.name}
+              <Typography gutterBottom variant="h5" textAlign="center">
+                {item.value?.species.name || item.name}
               </Typography>
             </CardContent>
           </Card>
